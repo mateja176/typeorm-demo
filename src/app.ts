@@ -5,10 +5,8 @@ import * as passport from 'passport';
 import { Connection } from 'typeorm';
 import { jwtSecret } from './config/jwt';
 import { Army } from './entity/Army';
-import { User } from './entity/User';
 import { Request } from './models';
 import { passportInit } from './passport/init';
-import profileRoute from './routes/profile';
 
 const authenticate = passportInit(passport);
 
@@ -37,18 +35,11 @@ export const createApp = (connection: Connection): express.Express => {
     });
   });
 
-  app.get('/users', async (req: Request, res) => {
-    const users = await req.db.getRepository(User).find();
-
-    res.json(users);
-  });
-
   app.post(
     '/join',
     async (req: Request, res, next) => {
       const { headers } = req;
       if (!Object.keys(headers).includes('authorization')) {
-        // user has joined
         const { body } = req;
 
         const { name, squadCount } = body;
@@ -72,12 +63,9 @@ export const createApp = (connection: Connection): express.Express => {
     },
     authenticate,
     (req, res, next) => {
-      // user has returned
       next('You have already joined');
     },
   );
-
-  app.use('/profile', authenticate, profileRoute);
 
   return app;
 };

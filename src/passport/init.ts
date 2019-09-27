@@ -4,7 +4,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtSecret } from '../config/jwt';
 
 export const passportInit = (passport: PassportStatic): RequestHandler => {
-  // set up passport
   passport.use(
     new Strategy(
       {
@@ -16,7 +15,7 @@ export const passportInit = (passport: PassportStatic): RequestHandler => {
       },
     ),
   );
-  // declare passport jwt based authentication middleware
+
   const authenticate = passport.authenticate('jwt', { session: false });
 
   return authenticate;

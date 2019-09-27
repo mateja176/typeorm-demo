@@ -4,7 +4,6 @@ import * as request from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import { createApp } from './app';
 import { mongoConfig } from './config/mongo';
-import { User, UserDto } from './entity/User';
 
 describe('Server', () => {
   const mongod = new MongoMemoryServer();
@@ -34,23 +33,6 @@ describe('Server', () => {
       .get('/')
       .expect(200)
       .expect('Hello World')
-      .end(done);
-  });
-  it('should return users', async done => {
-    const testUser: UserDto = { email: 'test@test.com', password: '123' };
-    const user = User.create(testUser);
-    const userRepo = connection.getRepository(User);
-    await userRepo.save(user);
-
-    request(app)
-      .get('/users')
-      .expect(200)
-      .expect(res =>
-        res.body.forEach((u: User) => {
-          delete u.id;
-        }),
-      )
-      .expect([testUser])
       .end(done);
   });
 });

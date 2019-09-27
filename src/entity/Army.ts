@@ -14,13 +14,13 @@ export class Army extends ArmyDto {
   id: string;
 
   static create = (dto: ArmyDto): Army => {
-    const user = new Army();
+    const army = new Army();
 
     Object.entries(dto).forEach(([key, value]) => {
-      user[key] = value;
+      army[key] = value;
     });
 
-    return user;
+    return army;
   };
 }
 
