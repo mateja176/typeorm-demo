@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --setupFiles dotenv/config",
+    "test:watch": "yarn test --watch",
     "start": "ts-node -r dotenv/config src",
     "dev": "nodemon -r dotenv/config src/index.ts",
     "lint": "eslint src/**/*.ts"
