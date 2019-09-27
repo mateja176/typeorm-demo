@@ -3,7 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as request from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import { createApp } from './app';
-import mongoConfig from './config/mongo';
+import { mongoConfig } from './config/mongo';
 import { User, UserDto } from './entity/User';
 
 describe('Server', () => {

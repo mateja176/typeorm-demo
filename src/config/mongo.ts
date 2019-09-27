@@ -1,9 +1,9 @@
 import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
 
-export default {
+export const mongoConfig: MongoConnectionOptions = {
   type: 'mongodb',
   host: 'localhost',
-  database: 'jwt',
+  database: process.env.DB_NAME,
   useNewUrlParser: true,
   useUnifiedTopology: true,
   synchronize: true,
@@ -16,4 +16,4 @@ export default {
     migrationsDir: 'src/migration',
     subscribersDir: 'src/subscriber',
   },
-} as MongoConnectionOptions;
+};
