@@ -50,6 +50,7 @@
     "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",
     "typegoose": "^5.9.1",
-    "typeorm": "^0.2.19"
+    "typeorm": "^0.2.19",
+    "uuid": "^3.3.3"
   }
 }
