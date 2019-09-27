@@ -22,7 +22,9 @@ describe('Server', () => {
     await Promise.all(
       dbConnection.entityMetadatas
         .map(({ tableName }) => tableName)
-        .map(tableName => dbConnection.manager.clear(tableName)),
+        .map(
+          tableName => dbConnection.manager.clear(tableName).catch(() => {}), // handles ns not found errors
+        ),
     );
   });
   afterAll(async () => {
