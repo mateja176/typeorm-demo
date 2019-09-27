@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 createConnection(mongoConfig)
   .then(connection => {
     createApp(connection).listen(port, () => {
-      console.log(`http://localhost:${port}`);
+      console.log(chalk.blue(`http://localhost:${port}`));
     });
   })
   .catch(error => console.log(chalk.magenta(error)));
