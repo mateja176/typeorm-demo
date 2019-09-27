@@ -24,8 +24,9 @@ export const createApp = (connection: Connection): express.Express => {
     res.send('Hello World');
   });
 
-  app.get('/open', (req, res) => {
-    res.write('Opened connection');
+  app.get('/sse', (req, res) => {
+    res.write('Connected');
+    res.write('Hello');
     req.on('close', () => {
       console.log('closed');
     });

@@ -24,6 +24,7 @@
     "arrow-parens": "off",
     "no-console": "off",
     "function-paren-newline": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "max-len": "off"
   }
 }
