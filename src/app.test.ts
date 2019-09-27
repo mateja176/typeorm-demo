@@ -26,6 +26,7 @@ describe('Server', () => {
     );
   });
   afterAll(async () => {
+    await dbConnection.close();
     await mongod.stop();
   });
   test('Hello World', done => {
