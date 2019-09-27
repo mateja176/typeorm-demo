@@ -7,22 +7,22 @@ import { mongoConfig } from './config/mongo';
 
 describe('Server', () => {
   const mongod = new MongoMemoryServer();
-  let connection: Connection;
+  let dbConnection: Connection;
   let app: express.Express;
 
   beforeAll(async () => {
     const uri = await mongod.getConnectionString();
-    connection = await createConnection({
+    dbConnection = await createConnection({
       ...mongoConfig,
       url: uri,
     });
-    app = createApp(connection);
+    app = createApp(dbConnection);
   });
   afterEach(async () => {
     await Promise.all(
-      connection.entityMetadatas
+      dbConnection.entityMetadatas
         .map(({ tableName }) => tableName)
-        .map(tableName => connection.manager.clear(tableName)),
+        .map(tableName => dbConnection.manager.clear(tableName)),
     );
   });
   afterAll(async () => {
