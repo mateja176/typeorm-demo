@@ -48,16 +48,15 @@ export const createApp = (connection: Connection): express.Express => {
           return res.send('"name" and "squadCount" parameters are required');
         }
 
-        const army = Army.create(body);
-
         const armyRepo = req.db.getRepository(Army);
 
-        await armyRepo.save(army);
+        const army = Army.create(body);
 
+        await armyRepo.save(army);
         const activeArmies = await armyRepo.find({ active: true });
 
         const token = jwt.sign({ army: { name, squadCount } }, jwtSecret);
-        return res.json({ token, activeArmies });
+        return res.json({ token, armies: activeArmies });
       }
 
       return next();
@@ -80,7 +79,7 @@ export const createApp = (connection: Connection): express.Express => {
 
       const activeArmies = armyRepo.find({ active: true });
 
-      res.send(activeArmies);
+      res.json({ armies: activeArmies });
     },
   );
 
