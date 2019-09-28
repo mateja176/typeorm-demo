@@ -13,6 +13,9 @@ export class Army extends ArmyDto {
   @ObjectIdColumn()
   id: string;
 
+  @Column()
+  active: boolean;
+
   static create = (dto: ArmyDto): Army => {
     const army = new Army();
 

@@ -45,22 +45,42 @@ export const createApp = (connection: Connection): express.Express => {
         if (isNil(name) || isNil(squadCount)) {
           res.status(400);
 
-          return next('"name" and "squadCount" parameters are required');
+          return res.send('"name" and "squadCount" parameters are required');
         }
 
         const army = Army.create(body);
 
-        await req.db.getRepository(Army).save(army);
+        const armyRepo = req.db.getRepository(Army);
+
+        await armyRepo.save(army);
+
+        const activeArmies = await armyRepo.find({ active: true });
 
         const token = jwt.sign({ army: { name, squadCount } }, jwtSecret);
-        return res.json({ token });
+        return res.json({ token, activeArmies });
       }
 
       return next();
     },
     authenticate,
-    (req, res, next) => {
-      next('You have already joined');
+    (req: Request<Army>, res) => {
+      const {
+        user: { id },
+      } = req;
+
+      const armyRepo = req.db.getRepository(Army);
+
+      const army = armyRepo.findOne(id);
+
+      if (!army) {
+        res.status(404);
+
+        res.json({ error: `Army with id "${id}" not found` });
+      }
+
+      const activeArmies = armyRepo.find({ active: true });
+
+      res.send(activeArmies);
     },
   );
 
