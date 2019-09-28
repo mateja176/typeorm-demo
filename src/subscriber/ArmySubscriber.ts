@@ -13,7 +13,7 @@ export class ArmySubscriber implements EntitySubscriberInterface<Army> {
     return Army;
   }
 
-  beforeInsert(event: InsertEvent<Army>) {
+  afterInsert(event: InsertEvent<Army>) {
     console.log(event);
   }
 }
