@@ -63,23 +63,11 @@ export const createApp = (connection: Connection): express.Express => {
     },
     authenticate,
     (req: Request<Army>, res) => {
-      const {
-        user: { id },
-      } = req;
-
       const armyRepo = req.db.getRepository(Army);
-
-      const army = armyRepo.findOne(id);
-
-      if (!army) {
-        res.status(404);
-
-        res.json({ error: `Army with id "${id}" not found` });
-      }
 
       const activeArmies = armyRepo.find({ active: true });
 
-      res.json({ armies: activeArmies });
+      return res.json({ armies: activeArmies });
     },
   );
 
