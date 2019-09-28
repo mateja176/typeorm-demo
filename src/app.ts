@@ -50,7 +50,7 @@ export const createApp = (connection: Connection): express.Express => {
 
         const armyRepo = req.db.getRepository(Army);
 
-        await armyRepo.insert(body);
+        await armyRepo.insert({ ...body, active: true });
 
         const activeArmies = await armyRepo.find({ active: true });
 
