@@ -20,6 +20,12 @@ export const createApp = (connection: Connection): express.Express => {
 
   app.use(express.json());
 
+  // app.get('/sub', (req: Request) => {
+  //   console.log(req.db.subscribers); // [ArmySubscriber]
+  //   const armySubscriber = req.db.subscribers[0];
+  //   armySubscriber.afterInsert
+  // });
+
   app.get('/', (req, res) => {
     res.send('Hello World');
   });
