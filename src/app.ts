@@ -64,5 +64,11 @@ export const createApp = (connection: Connection): express.Express => {
     },
   );
 
+  app.get('/armies', authenticate, async (req: Request, res) => {
+    const armies = await req.db.getRepository(Army).find();
+
+    res.json(armies);
+  });
+
   return app;
 };
