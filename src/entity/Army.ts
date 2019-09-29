@@ -27,4 +27,4 @@ export class Army extends ArmyDto {
   };
 }
 
-export const ArmySerialized = ArmyDto;
+export const ArmySerialized = Army;
