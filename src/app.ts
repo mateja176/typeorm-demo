@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 import * as passport from 'passport';
 import { Connection } from 'typeorm';
 import { jwtSecret } from './config/jwt';
-import { Army } from './entity/Army';
+import { Army, ArmyDto } from './entity/Army';
 import { Request } from './models';
 import { passportInit } from './passport/init';
 
@@ -20,17 +20,18 @@ export const createApp = (connection: Connection): express.Express => {
 
   app.use(express.json());
 
+  // TODO
   // app.get('/sub', (req: Request) => {
-  //   console.log(req.db.subscribers); // [ArmySubscriber]
   //   const armySubscriber = req.db.subscribers[0];
   //   armySubscriber.afterInsert(event);
   // });
 
   app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.json('Hello World');
   });
 
   app.get('/sse', (req, res) => {
+    // TODO
     res.write('Connected');
     res.write('Hello');
     req.on('close', () => {
@@ -40,34 +41,37 @@ export const createApp = (connection: Connection): express.Express => {
 
   app.post(
     '/join',
-    async (req: Request, res, next) => {
+    async (req: Request<ArmyDto | undefined>, res, next) => {
       const { headers } = req;
       if (!Object.keys(headers).includes('authorization')) {
         const { body } = req;
 
-        const { name, squadCount } = body;
-
-        // TODO validate args
-        if (isNil(name) || isNil(squadCount)) {
-          res.status(400);
-
-          return res.send('"name" and "squadCount" parameters are required');
+        if (!body.name || isNil(body.squadCount)) {
+          return res.status(400).json({
+            message: '"name" and "squadCount" parameters are required',
+          });
+        }
+        const squadCount = parseInt(body.squadCount, 10);
+        if (Number.isNaN(squadCount)) {
+          return res.status(400).json({
+            message: '"squadCount" must be an integer',
+          });
         }
 
         const armyRepo = req.db.getRepository(Army);
 
-        await armyRepo.insert({ ...body, active: true });
+        await armyRepo.insert({ name: body.name, squadCount, active: true });
 
         const activeArmies = await armyRepo.find({ active: true });
 
-        const token = jwt.sign({ army: { name, squadCount } }, jwtSecret);
+        const token = jwt.sign({ name: body.name, squadCount }, jwtSecret);
         return res.json({ token, armies: activeArmies });
       }
 
       return next();
     },
     authenticate,
-    async (req: Request<Army>, res) => {
+    async (req: Request<ArmyDto>, res) => {
       const activeArmies = await req.db
         .getRepository(Army)
         .find({ active: true });
@@ -76,7 +80,7 @@ export const createApp = (connection: Connection): express.Express => {
     },
   );
 
-  app.get('/armies', authenticate, async (req: Request, res) => {
+  app.get('/armies', authenticate, async (req: Request<ArmyDto>, res) => {
     const armies = await req.db.getRepository(Army).find();
 
     res.json(armies);
