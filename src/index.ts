@@ -7,9 +7,9 @@ import { mongoConfig } from './config/mongo';
 const port = process.env.PORT || 3000;
 
 createConnection(mongoConfig)
-  .then(connection => {
+  .then((connection) => {
     createApp(connection).listen(port, () => {
       console.log(chalk.blue(`http://localhost:${port}`));
     });
   })
-  .catch(error => console.log(chalk.magenta(error)));
+  .catch((error) => console.log(chalk.magenta(error)));

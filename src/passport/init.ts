@@ -10,11 +10,8 @@ export const passportInit = (passport: PassportStatic): RequestHandler => {
         secretOrKey: jwtSecret,
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       },
-      ({ army }, done): void => {
-        if (!army) {
-          return done('Invalid payload, army not found');
-        }
-        return done(null, army);
+      (payload, done): void => {
+        done(null, payload);
       },
     ),
   );
